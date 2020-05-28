@@ -28,7 +28,51 @@ After the installation of both Elasticsearch Operator and Jaeger Operator, navig
 
 ## Configure Jaeger Operator
 
-The next step is to define an Jaeger instance.
+Before creating a Jaeger instance, let's recap on the Jaeger components. The Jaeger is comprised of agent, collector and query three main components. Additionally, there are jaeger client which is part of your application responsible for instrumenting the appliaction and creating spans. And finally, Jaeger makes use of third party storage solutions such as Cassandra and Elasticsearch for data persistence. The overall architecure is illustrated in the diagram below.
+
+**Insert screenshot here**
+
+Next, we need to figure out which deployment strategy to use. A jaeger strategy dictates how the jaeger components should be deployed on Openshift. The Jaeger CR from Jaeger Operator offers three types of deployment strategy:
+1. allInOne
+2. Production
+3. Streaming
+
+As tempting as one might want to use allInOne since it's the default strategy, its extremely limited capability makes it not suitable for even some serious test/development settings. As the name suggets, allInOne strategy packs the agent, collector and query in a single pod. It's an easy way to start and manage all Jaeger components for some POC works. However there are two limitations that severely handicap the potential of this setup. For one, the allInOne strategy is using memory as its backend storage, so there is no real data persistence as killing the pod will wipe out every single collected trace spans. And secondly, allInOne does not allow any scaling as the replica count is locked to 1.
+
+Production strategy in contrast deploys the collector and query processes individually as seperate pods on Openshift, and can be scaled individually on demand. In addition, it supports secured connection with backend storage services like Cassandra and Elasticsearch, which fits our need perfectly. Streaming strategy is essentially production strategy with added support for streaming platform like Kafka, which will ignore for now for the sake of simplicity.
+
+Let's proceed to create the jaeger yaml file
+
+```
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: simple-prod
+spec:
+  strategy: production
+  storage:
+    type: elasticsearch
+    elasticsearch:
+      nodeCount: 1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 1Gi
+        limits:
+          memory: 1Gi
+```
+
+Note that there is barely any detailed configuration for Elasticsearch in the Jaeger yaml file. The Jaeger Operator is able to detect existing Elasticsearch instanced deployed by the Elasticsearch Operator, and autoprovision the secured communication between Elasticsearch and Jaeger processes.
+
+Create the Jaeger instance using the yaml file above. Upon successful creation of the Jaeger instance, the following pod processes will be running on your cluster.
+
+```
+[root@fwji1-ocp43-inf ~]# oc get pods
+NAME                                                           READY   STATUS      RESTARTS   AGE
+elasticsearch-cdm-jaegertrarcingsimpleprod-1-cb8fd749b-kqtkx   2/2     Running     0          50d
+simple-prod-collector-6f654659bb-8868l                         1/1     Running     0          9d
+simple-prod-query-864dfd87b4-wxrps                             2/2     Running     0          12h
+```
 
 ## Prepare your application for Openshift
 
