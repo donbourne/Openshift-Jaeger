@@ -7,9 +7,28 @@ With the ever growing adoption of cloud native application development and micro
 
 ## Install Jaeger Operator
 
+The best way to deploy Jaeger to Openshift is using the Jaeger Operator. It's extremely easy to install via the use of Operator Hub. It also helps the user to automate the setup of many security related of configurations. We also have to choose a backend storage solution to persist the data. For Jaeger, the official supported storage options are either Cassandra or Elasticsearch. For this article, I'll pick Elasticsearch due to my past familiarity with Elasticsearch before. 
+
+Before the installation, let's first create a new project on our Openshift cluster called jaeger-tracing.
+```
+oc new-project jaeger-tracing
+```
+
+Next, we'll first install ElasticSearch Operator and then Jaeger Operator. This is so that the Jaeger Operator can self provision the existing ElasticSearch Opeartor with their already generated certificates stored as the Kubernetes Secrets.
+
+To install Elasticsearch Operator, nagivate to the Operator Hub and search for Elasticsearch. Follow the prompt to install the operator and make sure that it is installed to the **jaeger-tracing** project created earlier. 
+
+**Insert screenshot here**
+
+After the installation of Elasticsearch Operator, follow the similar steps on the Operator hub to install the Jaeger Operator. Similarly, make sure that it is installed to the same **jaeger-tracing** project.
+
+**Insert screenshot here**
+
+After the installation of both Elasticsearch Operator and Jaeger Operator, navigate to the Installed Operators page to verify that both of operators have been installed successfully.
 
 ## Configure Jaeger Operator
 
+The next step is to define an Jaeger instance.
 
 ## Prepare your application for Openshift
 
