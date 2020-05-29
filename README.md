@@ -11,7 +11,7 @@ The best way to deploy Jaeger to Openshift is using the Jaeger Operator. It's ex
 
 Before the installation, let's first create a new project on our Openshift cluster called jaeger-tracing.
 ```
-oc new-project jaeger-tracing
+oc new-project jaegertracing
 ```
 
 Next, we'll first install ElasticSearch Operator and then Jaeger Operator. This is so that the Jaeger Operator can self provision the existing ElasticSearch Opeartor with their already generated certificates stored as the Kubernetes Secrets.
