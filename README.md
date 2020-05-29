@@ -131,4 +131,4 @@ The above example provided a typical setup of Jaeger tracing on Openshift. Howev
 
 ## Summary
 
-
+Distributed tracing has become an essential in the world of microservice observability. With Jaeger Operator, user can now start doing distributed tracing on Openshift with minimum configuration. Yet it still offers tons of configurables for advanced users to leverage the full potential of Jaeger. If you want to learn more about Jaeger, the Jaeger tracing home page is still the best resource for Jaeger and Jaeger Operator contents. 
