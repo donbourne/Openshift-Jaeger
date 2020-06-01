@@ -1,8 +1,8 @@
-#Sample Open Liberty Application with Jaeger Support
+**Sample Open Liberty Application with Jaeger Support**
 
 This repository contain two application deployment yaml files that will deploy two OpenLiberty Java applications with MicroProfile OpenTracing 1.3 feature. Both of the applications will send tracing spans to Jaeger on Red Hat Openshift with Jaeger Operator.
 
-##Prerequesites
+**Prerequesites**
 
 Before deploying the applications to Red Hat Openshift cluster, make sure:
 
@@ -10,7 +10,7 @@ Before deploying the applications to Red Hat Openshift cluster, make sure:
 2. Jaeger Operator is installed
 3. A Jaeger instance is created with Production strategy
 
-##Deploy
+**Deploy**
 
 Use oc command to deploy the applications.
 ```
@@ -20,7 +20,7 @@ oc create -f system.yaml
 oc create -f inventory.yaml
 ```
 
-##Generate traces
+**Generate traces**
 
 To generate traces, visit the following url:
 - http://<inventory-route-jaegertrarcing>/inventory/systems/system
