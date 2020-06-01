@@ -35,9 +35,9 @@ Before creating a Jaeger instance, let's recap on the Jaeger components. Jaeger 
 *Figure 3: Typical production grade Jaeger architecture*
 
 Next, we need to figure out which deployment strategy to use. A deployment strategy dictates how the Jaeger components should be deployed on OpenShift. The Jaeger CR from Jaeger Operator offers three types of deployment strategy:
-**1. allInOne**
-**2. Production**
-**3. Streaming**
+1. allInOne
+2. Production
+3. Streaming
 
 As tempting as one might want to use the default allInOne strategy, its extremely limited capability makes it not suitable for even some serious test/development settings. As the name suggests, allInOne strategy packs the agent, collector and query in a single pod. It's an easy way to start and manage all Jaeger components for some POC works. However there are two limitations that severely handicap the potential of this setup. For one, the allInOne strategy is using memory as its backend storage, so there is no real data persistence as killing the pod will wipe out all the previously collected trace spans. And secondly, allInOne does not allow any scaling as the replica count is locked to 1.
 
