@@ -14,7 +14,7 @@ Before the installation, let's first create a new project on our OpenShift clust
 oc new-project jaegertracing
 ```
 
-Next, we'll first install ElasticSearch Operator and then Jaeger Operator. This is so that the Jaeger Operator can self provision any existing ElasticSearch Opeartor with their generated certificates stored as the Kubernetes Secrets.
+Next, we'll first install Elasticsearch Operator and then Jaeger Operator. This is so that the Jaeger Operator can self provision any existing Elasticsearch Opeartor with their generated certificates stored as the Kubernetes Secrets.
 
 To install Elasticsearch Operator, navigate to the Operator Hub and search for Elasticsearch. Follow the prompt to install the operator and make sure that it is installed to the **jaegertracing** project created earlier.
 
@@ -81,7 +81,7 @@ simple-prod-query-864dfd87b4-wxrps                             2/2     Running  
 
 You might wonder why there is no agent pod running after the creation of the Jaeger instance. That's because the agent is supposed to be injected as a sidecar container within the application pod in production (and streaming) strategy. The auto injection of the agent side car can be done through annotating the **Namespace** or **Deployments** with **sidecar.jaegertracing.io/inject: "true"** annotation. For controller types other than **Deployment** (ie. StatefulSet, DeploymentConfig, etc), the jaeger agent sidecar must be explicitly defined in the container spec. An example of a StatefulSet with Jaeger agent sidecar container is available at here.
 
-Below is a sample deployment with automatic agent sidecar injection. We also defined some environment variables that are used by my Jaeger client in my application.
+Below is a sample deployment with automatic agent sidecar injection. We also defined some environment variables that are used by the Jaeger client in my sample application.
 
 ```
 apiVersion: apps/v1
@@ -135,4 +135,4 @@ The above example provided a typical Jaeger setup on OpenShift. However dependin
 
 ## Summary
 
-Distributed tracing has become an essential in the world of observability for microservices. With Jaeger Operator, averages users can now start doing distributed tracing on OpenShift with minimum manual configuration. Yet it still offers tons of configurables for advanced users to leverage the full potential of Jaeger. If you want to learn more about Jaeger, the [Jaeger](jaegertracing.io) home page is still the best resource for Jaeger and Jaeger Operator contents.
+Distributed tracing has become an essential in the world of observability for microservices. With Jaeger Operator, averages users can now start doing distributed tracing on OpenShift with minimum manual configuration. Yet it still offers tons of configurables for advanced users to leverage the full potential of Jaeger. If you want to learn more about Jaeger, the [Jaeger home page](https://www.jaegertracing.io) is still the best resource for Jaeger and Jaeger Operator contents.
