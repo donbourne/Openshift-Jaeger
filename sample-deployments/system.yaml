@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    sidecar.jaegertracing.io/inject: "true"
+  creationTimestamp: null
+  labels:
+    app: system
+  name: system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: system
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: system
+    spec:
+      containers:
+      - env:
+        - name: JAEGER_REPORTER_LOG_SPANS
+          value: "true"
+        - name: JAEGER_SAMPLER_PARAM
+          value: "1"
+        - name: JAEGER_SAMPLER_TYPE
+          value: const
+        image: 'frankji/system-image'
+        name: system
+        ports:
+        - containerPort: 9080
+        - containerPort: 9443
+        resources: {}
+      restartPolicy: Always
+  test: false
+status: {}
+---
+apiVersion: v1
+kind: ImageStream
+metadata:
+  creationTimestamp: null
+  labels:
+    app: system
+  name: system
+spec:
+  tags:
+  - annotations: null
+    from:
+      kind: DockerImage
+      name: frankji/system-image
+    generation: null
+    importPolicy: {}
+    name: latest
+status:
+  dockerImageRepository: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: system
+  name: system
+spec:
+  ports:
+  - name: "9080"
+    port: 9080
+    targetPort: 9080
+  - name: "9443"
+    port: 9443
+    targetPort: 9443
+  selector:
+    app: system
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: system-route
+  namespace: jaegertrarcing
+spec:
+  host: system-route-jaegertrarcing.apps.fwji1-ocp43.os.fyre.ibm.com
+  path: "/system/properties"
+  to:
+    kind: Service
+    name: system
+    weight: 100
+  port:
+    targetPort: '9080'
+  wildcardPolicy: None

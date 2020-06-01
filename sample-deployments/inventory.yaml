@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    sidecar.jaegertracing.io/inject: "true"
+  creationTimestamp: null
+  labels:
+    app: inventory
+  name: inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: inventory
+    spec:
+      containers:
+      - env:
+        - name: JAEGER_REPORTER_LOG_SPANS
+          value: "true"
+        - name: JAEGER_SAMPLER_PARAM
+          value: "1"
+        - name: JAEGER_SAMPLER_TYPE
+          value: const
+        image: 'frankji/inventory-image'
+        name: inventory
+        ports:
+        - containerPort: 9081
+        - containerPort: 9444
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - inventory
+      from:
+        kind: ImageStreamTag
+        name: inventory:latest
+    type: ImageChange
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: inventory
+  name: inventory
+spec:
+  ports:
+  - name: "9081"
+    port: 9081
+    targetPort: 9081
+  - name: "9444"
+    port: 9444
+    targetPort: 9444
+  selector:
+    app: inventory
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: inventory-route
+  namespace: jaegertrarcing
+spec:
+  host: inventory-route-jaegertrarcing.apps.fwji1-ocp43.os.fyre.ibm.com
+  path: "/inventory/systems/system"
+  to:
+    kind: Service
+    name: inventory
+    weight: 100
+  port:
+    targetPort: '9081'
+  wildcardPolicy: None
