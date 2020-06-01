@@ -1,5 +1,4 @@
-# OpenShift-Jaeger
-A guide on how to deploy jaeger tracing on Red Hat OpenShift
+# How to do distributed tracing on Red Hat OpenShift with Jaeger
 
 ## Introduction
 
