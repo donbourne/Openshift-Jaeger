@@ -29,7 +29,7 @@ After the installation of both Elasticsearch Operator and Jaeger Operator, navig
 
 ## Configure Jaeger Operator
 
-Before creating a Jaeger instance, let's recap on the Jaeger components. The Jaeger is comprised of agent, collector and query three main components. Additionally, there is also Jaeger client which is part of your application responsible for instrumenting the application and creating spans. And finally, Jaeger makes use of third party storage solutions such as Cassandra and Elasticsearch for data persistence. The overall architecture is illustrated in the diagram below.
+Before creating a Jaeger instance, let's recap on the Jaeger components. Jaeger is comprised of agent, collector and query three main components. Additionally, there is also Jaeger client which is part of your application responsible for instrumenting the application and creating spans. And finally, Jaeger makes use of third party storage solutions such as Cassandra and Elasticsearch for data persistence. The overall architecture is illustrated in the diagram below.
 
 ![JAEGER Architecture Page](resources/img/architecture-v1.png "Jaeger Architecture")
 *Figure 3: Typical production grade Jaeger architecture*
